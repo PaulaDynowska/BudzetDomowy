@@ -1,36 +1,22 @@
 @model BudzetDomowyApp.Models.Operacja
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły operacji";
 }
 
-<h1>Details</h1>
+<h2>@ViewData["Title"]</h2>
 
-<div>
-    <h4>Operacja</h4>
-    <hr />
+<div class="p-4 mt-3 shadow-sm" style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px;">
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Kategoria)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Kategoria)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Kwota)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Kwota)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Data)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Data)
-        </dd>
+        <dt class="col-sm-3">Kategoria</dt>
+        <dd class="col-sm-9">@Model.Kategoria</dd>
+
+        <dt class="col-sm-3">Kwota</dt>
+        <dd class="col-sm-9">@Model.Kwota.ToString("F2")</dd>
+
+        <dt class="col-sm-3">Data</dt>
+        <dd class="col-sm-9">@Model.Data.ToShortDateString()</dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+    <a asp-action="Index" class="btn btn-dark mt-3">Wróć do listy</a>
 </div>

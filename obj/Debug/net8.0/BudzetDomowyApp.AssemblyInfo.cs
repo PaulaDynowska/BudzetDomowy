@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BudzetDomowyApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35d1f11ed9a043bfb82f7b761e50edd5cf26deb7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72c996ca64d9fa2e631dafb449a7c5ade96aed8f")]
 [assembly: System.Reflection.AssemblyProductAttribute("BudzetDomowyApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BudzetDomowyApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

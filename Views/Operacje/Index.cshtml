@@ -28,8 +28,12 @@
                         <td>@item.Kwota.ToString("F2")</td>
                         <td>@item.Data.ToShortDateString()</td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn" style="background-color: #ffc107; color: black;">Edytuj</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Usuń</a>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Szczegóły</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn" style="background-color: #ffc966; color: black;">Edytuj</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Usuń</a>
+                            </td>
+
                         </td>
                     </tr>
                 }
