@@ -4,40 +4,36 @@
     ViewData["Title"] = "Lista operacji";
 }
 
-<h1>Lista operacji</h1>
+<div class="container mt-4">
+    <h2>Lista operacji</h2>
+    <p>
+        <a asp-action="Create" class="btn" style="background-color: #7ed957; color: black;">Dodaj nową operację</a>
+    </p>
 
-<p>
-    <a asp-action="Create">Dodaj nową operację</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Kategoria)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Kwota)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Kategoria</td>
-            <td>@item.Kwota zł</td>
-            <td>@item.Data.ToShortDateString()</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+    <div style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px; padding: 20px;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Kategoria</th>
+                    <th>Kwota</th>
+                    <th>Data</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Kategoria</td>
+                        <td>@item.Kwota.ToString("F2")</td>
+                        <td>@item.Data.ToShortDateString()</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn" style="background-color: #ffc107; color: black;">Edytuj</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Usuń</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -8,33 +8,32 @@
 <h4>Formularz operacji</h4>
 <hr />
 
-<div class="card bg-light p-4 shadow-sm" style="border: 1px solid #ddd;">
-    <div class="card-body">
-        <form asp-action="Create">
-            <div class="form-group">
-                <label asp-for="Kategoria" class="control-label"></label>
-                <input asp-for="Kategoria" class="form-control" />
-                <span asp-validation-for="Kategoria" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Kwota" class="control-label"></label>
-                <input asp-for="Kwota" class="form-control" />
-                <span asp-validation-for="Kwota" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Data" class="control-label"></label>
-                <input asp-for="Data" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-3">
-                <button type="submit" class="btn btn-primary">Zapisz</button>
-            </div>
-            <div class="form-group mt-2">
-                <a asp-action="Index" class="btn btn-warning">Wróć do listy</a>
-            </div>
-        </form>
-    </div>
+<div class="p-4 shadow-sm" style="background-color: #f3e9dd; border: 2px solid black; border-radius: 6px;">
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Kategoria" class="control-label"></label>
+            <input asp-for="Kategoria" class="form-control" />
+            <span asp-validation-for="Kategoria" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Kwota" class="control-label"></label>
+            <input asp-for="Kwota" class="form-control" />
+            <span asp-validation-for="Kwota" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Data" class="control-label"></label>
+            <input asp-for="Data" class="form-control" />
+            <span asp-validation-for="Data" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-success">Zapisz</button>
+        </div>
+        <div class="form-group mt-2">
+            <a asp-action="Index" class="btn btn-dark">Wróć do listy</a>
+        </div>
+    </form>
 </div>
+
 
 
 @section Scripts {
