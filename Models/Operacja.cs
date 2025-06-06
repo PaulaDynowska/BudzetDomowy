@@ -6,6 +6,8 @@ namespace BudzetDomowyApp.Models
     public class Operacja
     {
         public int Id { get; set; }
+        public bool CzyUsunieta { get; set; } = false;
+
 
         [Required]
         public string Kategoria { get; set; }

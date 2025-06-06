@@ -4,25 +4,31 @@
     ViewData["Title"] = "Usuń operację";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2 class="mb-3">Czy na pewno chcesz usunąć?</h2>
 
-<div class="p-4 mt-3 shadow-sm" style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px;">
-    <h4>Czy na pewno chcesz usunąć tę operację?</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3">Kategoria</dt>
-        <dd class="col-sm-9">@Model.Kategoria</dd>
+    <div style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px; padding: 20px;">
+        <dl class="row">
+            <dt class="col-sm-2">Kategoria</dt>
+            <dd class="col-sm-10">@Model.Kategoria</dd>
 
-        <dt class="col-sm-3">Kwota</dt>
-        <dd class="col-sm-9">@Model.Kwota.ToString("F2")</dd>
+            <dt class="col-sm-2">Kwota</dt>
+            <dd class="col-sm-10">@Model.Kwota zł</dd>
 
-        <dt class="col-sm-3">Data</dt>
-        <dd class="col-sm-9">@Model.Data.ToShortDateString()</dd>
-    </dl>
+            <dt class="col-sm-2">Data</dt>
+            <dd class="col-sm-10">@Model.Data.ToShortDateString()</dd>
+        </dl>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">Usuń</button>
-        <a asp-action="Index" class="btn btn-dark">Wróć do listy</a>
-    </form>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+
+            <button type="submit" class="btn" style="background-color: #c0c0c0; color: red; font-weight: bold;">
+                Usuń
+            </button>
+
+            <a asp-action="Index" class="btn" style="background-color: black; color: white; font-weight: bold;">
+                Wróć do listy
+            </a>
+        </form>
+    </div>
 </div>

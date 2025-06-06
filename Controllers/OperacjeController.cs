@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BudzetDomowyApp.Models;
+using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
+using System.Linq;
+using QuestPDF.Helpers;
 
 namespace BudzetDomowyApp.Controllers
 {
@@ -18,24 +17,13 @@ namespace BudzetDomowyApp.Controllers
             _context = context;
         }
 
-        private List<string> KategorieList()
-        {
-            return new List<string>
-            {
-                "Jedzenie",
-                "Rachunki",
-                "Transport",
-                "Rozrywka",
-                "Praca",
-                "Inne"
-            };
-        }
-
-
-        // GET: Operacje
+        // INDEX
         public async Task<IActionResult> Index()
         {
-            var operacje = await _context.Operacje.ToListAsync();
+            var operacje = await _context.Operacje
+                .Where(o => !o.CzyUsunieta)
+                .OrderByDescending(o => o.Data)
+                .ToListAsync();
 
             ViewBag.Suma = operacje.Sum(o => o.Kwota);
             ViewBag.Wplywy = operacje.Where(o => o.Kwota > 0).Sum(o => o.Kwota);
@@ -44,39 +32,16 @@ namespace BudzetDomowyApp.Controllers
             return View(operacje);
         }
 
-
-        // GET: Operacje/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var operacja = await _context.Operacje
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (operacja == null)
-            {
-                return NotFound();
-            }
-
-            return View(operacja);
-        }
-
-        // GET: Operacje/Create
+        // CREATE
         public IActionResult Create()
         {
-            ViewBag.Kategorie = new SelectList(KategorieList());
+            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View();
         }
 
-
-
-        // POST: Operacje/Create
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Kategoria,Kwota,Data")] Operacja operacja)
+        public async Task<IActionResult> Create(Operacja operacja)
         {
             if (ModelState.IsValid)
             {
@@ -84,82 +49,58 @@ namespace BudzetDomowyApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
 
-        // GET: Operacje/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // EDIT
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var operacja = await _context.Operacje.FindAsync(id);
-            if (operacja == null)
-            {
-                return NotFound();
-            }
+            if (operacja == null) return NotFound();
 
-            ViewBag.Kategorie = new SelectList(KategorieList(), operacja.Kategoria);
+            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
-
-
-
-        // POST: Operacje/Edit/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Kategoria,Kwota,Data")] Operacja operacja)
+        public async Task<IActionResult> Edit(int id, Operacja operacja)
         {
-            if (id != operacja.Id)
-            {
-                return NotFound();
-            }
+            if (id != operacja.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(operacja);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OperacjaExists(operacja.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(operacja);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
 
-        // GET: Operacje/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DETAILS
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var operacja = await _context.Operacje.FindAsync(id);
+            if (operacja == null) return NotFound();
 
-            var operacja = await _context.Operacje
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (operacja == null)
-            {
-                return NotFound();
-            }
-
+            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
 
-        // POST: Operacje/Delete/5
+        // DELETE
+        public async Task<IActionResult> Delete(int id)
+        {
+            var operacja = await _context.Operacje.FindAsync(id);
+            if (operacja == null) return NotFound();
+
+            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
+            return View(operacja);
+        }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -167,16 +108,79 @@ namespace BudzetDomowyApp.Controllers
             var operacja = await _context.Operacje.FindAsync(id);
             if (operacja != null)
             {
-                _context.Operacje.Remove(operacja);
+                operacja.CzyUsunieta = true;
+                _context.Update(operacja);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OperacjaExists(int id)
+        // HISTORIA
+        public async Task<IActionResult> Historia()
         {
-            return _context.Operacje.Any(e => e.Id == id);
+            var wszystkie = await _context.Operacje
+                .OrderByDescending(o => o.Data)
+                .ToListAsync();
+
+            ViewBag.Suma = wszystkie
+                .Where(o => !o.CzyUsunieta)
+                .Sum(o => o.Kwota);
+
+            return View(wszystkie);
+        }
+
+        // GENERUJ PDF
+        public IActionResult GenerujPdf()
+        {
+            var operacje = _context.Operacje
+                .Where(o => !o.CzyUsunieta)
+                .OrderByDescending(o => o.Data)
+                .ToList();
+
+            var dokument = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Margin(30);
+                    page.Size(PageSizes.A4);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Header()
+                        .Text("Zestawienie operacji")
+                        .FontSize(20)
+                        .Bold()
+                        .AlignCenter();
+
+                    page.Content()
+                        .Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(1);
+                                columns.RelativeColumn(1);
+                                columns.RelativeColumn(1);
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell().Text("Kategoria").Bold();
+                                header.Cell().Text("Kwota").Bold();
+                                header.Cell().Text("Data").Bold();
+                            });
+
+                            foreach (var op in operacje)
+                            {
+                                table.Cell().Text(op.Kategoria);
+                                table.Cell().Text($"{op.Kwota} zł");
+                                table.Cell().Text(op.Data.ToShortDateString());
+                            }
+                        });
+                });
+            });
+
+            var pdf = dokument.GeneratePdf();
+            return File(pdf, "application/pdf", "RaportOperacji.pdf");
         }
     }
 }

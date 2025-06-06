@@ -5,56 +5,58 @@
 }
 
 <div class="container mt-4">
-    <h2>Lista operacji</h2>
+        <div class="d-flex justify-content-end mb-3">
+        <a asp-action="GenerujPdf" class="btn"
+        style="width: 180px; background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
+            Raport PDF
+        </a>
+    </div>
 
-    <p>
-        <a asp-action="Create" class="btn" style="background-color: #7ed957; color: black;">Dodaj nową operację</a>
-    </p>
+    <table class="table table-striped" style="background-color: white; border: 2px solid black; border-radius: 8px;">
 
-    <div style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px; padding: 20px;">
-        <table class="table table-striped">
-            <thead>
+        <thead>
                 <tr>
+                    <th>Nr</th>
                     <th>Kategoria</th>
                     <th>Kwota</th>
                     <th>Data</th>
                     <th></th>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Kategoria</td>
-                        <td>@item.Kwota.ToString("F2")</td>
-                        <td>@item.Data.ToShortDateString()</td>
-                        <td>
-                            <td>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Szczegóły</a>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn" style="background-color: #ffc966; color: black;">Edytuj</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Usuń</a>
-                            </td>
+        </thead>
 
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="p-3 mt-4 shadow-sm" style="background-color: #b6f2a1; border: 2px solid black; border-radius: 8px;">
-        <div style="font-size: 1rem;">
-            <p><strong>Wpływy:</strong> @ViewBag.Wplywy zł</p>
-            <p>
-                <strong>Wydatki:</strong> 
-                <span style="color: red;">@ViewBag.Wydatki zł</span>
-            </p>
-            <p style="font-size: 1.25rem;">
-                <strong>Suma końcowa:</strong> 
-                <span style="color:@(ViewBag.Suma < 0 ? "red" : "black"); font-weight: bold;">
-                    @ViewBag.Suma zł
-                </span>
-            </p>
-        </div>
+        <tbody>
+        @{ var numer = 1; }
+        @foreach (var item in Model)
+        {
+                <tr>
+                <td>@numer</td>
+                <td>@item.Kategoria</td>
+                <td style="color: @(item.Kwota < 0 ? "red" : "green"); font-weight: bold;">
+                    @item.Kwota zł
+                </td>
+                <td>@item.Data.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id"
+                       class="btn btn-sm"
+                       style="background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
+                        Szczegóły
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"
+                       class="btn btn-sm"
+                       style="background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
+                        Edytuj
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"
+                       class="btn btn-sm"
+                       style="background-color: #c0c0c0; color: red; font-weight: bold;">
+                        Usuń
+                    </a>
+                </td>
+            </tr>
+             numer++;
+        }
+        </tbody>
+    </table>
     </div>
 
 </div>

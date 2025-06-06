@@ -1,0 +1,48 @@
+@model IEnumerable<BudzetDomowyApp.Models.Operacja>
+
+@{
+    ViewData["Title"] = "Historia operacji";
+}
+
+<div class="container mt-4">
+    <h2>Historia wszystkich operacji</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Nr</th>
+                <th>Kategoria</th>
+                <th>Kwota</th>
+                <th>Data</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        @{
+            var nr = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@nr</td>
+                <td>@item.Kategoria</td>
+                <td style="color:@(item.Kwota < 0 ? "red" : "green"); font-weight:bold;">
+                    @item.Kwota zł
+                </td>
+                <td>@item.Data.ToShortDateString()</td>
+                <td>
+                    @if (item.CzyUsunieta)
+                    {
+                        <span style="color: gray;">Usunięta</span>
+                    }
+                    else
+                    {
+                        <span style="color: green;">Aktywna</span>
+                    }
+                </td>
+            </tr>
+            nr++;
+        }
+        </tbody>
+    </table>
+</div>

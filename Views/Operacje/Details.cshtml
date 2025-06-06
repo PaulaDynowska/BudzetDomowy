@@ -4,19 +4,29 @@
     ViewData["Title"] = "Szczegóły operacji";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <h2 class="mb-3">Szczegóły operacji</h2>
 
-<div class="p-4 mt-3 shadow-sm" style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px;">
-    <dl class="row">
-        <dt class="col-sm-3">Kategoria</dt>
-        <dd class="col-sm-9">@Model.Kategoria</dd>
+    <div style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px; padding: 20px;">
+        <dl class="row">
+            <dt class="col-sm-2">Kategoria</dt>
+            <dd class="col-sm-10">@Model.Kategoria</dd>
 
-        <dt class="col-sm-3">Kwota</dt>
-        <dd class="col-sm-9">@Model.Kwota.ToString("F2")</dd>
+            <dt class="col-sm-2">Kwota</dt>
+            <dd class="col-sm-10">@Model.Kwota zł</dd>
 
-        <dt class="col-sm-3">Data</dt>
-        <dd class="col-sm-9">@Model.Data.ToShortDateString()</dd>
-    </dl>
+            <dt class="col-sm-2">Data</dt>
+            <dd class="col-sm-10">@Model.Data.ToShortDateString()</dd>
+        </dl>
 
-    <a asp-action="Index" class="btn btn-dark mt-3">Wróć do listy</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id"
+           class="btn" style="background-color: #ffb347; color: black; font-weight: bold;">
+            Edytuj
+        </a>
+
+        <a asp-action="Index"
+           class="btn" style="background-color: black; color: white; font-weight: bold;">
+            Wróć do listy
+        </a>
+    </div>
 </div>

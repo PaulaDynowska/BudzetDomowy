@@ -1,49 +1,63 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@inject IViewComponentHelper Component
+@inject Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper<dynamic> Html
+
+<!DOCTYPE html>
+<html lang="pl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BudzetDomowyApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BudzetDomowyApp.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Budżet Domowy App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BudzetDomowyApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+<body style="background-color: #f4f4f4; font-family: 'Segoe UI', sans-serif;">
+    <div class="container-fluid p-4" style="background: linear-gradient(to right, #c0c0c0, #dcdcdc); border-bottom: 2px solid #333;">
+        
+        <!-- NAGŁÓWEK NA ŚRODKU -->
+        <div class="text-center">
+            <h1 style="font-size: 2.8rem; font-weight: bold; letter-spacing: 1px; color: #1a472a;">
+                Budżet Domowy App
+            </h1>
+        </div>
+
+        <!-- PRZYCISKI I SALDO PONIŻEJ -->
+                <div class="d-flex justify-content-center align-items-center gap-3 mt-4 flex-wrap">
+            <a asp-action="Index" asp-controller="Operacje"
+            class="btn"
+            style="background-color: #1a472a; color: white; font-weight: bold; padding: 10px 20px;">
+                Aplikacja
+            </a>
+
+            <a asp-action="Create" asp-controller="Operacje"
+            class="btn"
+            style="background-color: #1a472a; color: white; font-weight: bold; padding: 10px 20px;">
+                Dodaj nową operację
+            </a>
+
+            <a asp-action="Historia" asp-controller="Operacje"
+            class="btn"
+            style="background-color: #c0c0c0; color: #1a472a; font-weight: bold; padding: 10px 20px;">
+                Historia konta
+            </a>
+
+            <div class="bg-light border px-4 py-2 rounded shadow-sm" style="min-width: 220px;">
+                <strong>Saldo:</strong>
+                <span style="font-weight: bold; color: black;">@ViewBag.Suma zł</span>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - BudzetDomowyApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <!-- GŁÓWNA TREŚĆ STRONY -->
+    <main role="main" class="px-5 py-4">
+        @RenderBody()
+    </main>
+
+    <!-- STOPKA OPCJONALNA -->
+    <footer class="text-center text-muted py-3 small">
+        &copy; @DateTime.Now.Year - Budżet Domowy App
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
