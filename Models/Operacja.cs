@@ -11,7 +11,7 @@ namespace BudzetDomowyApp.Models
         public string Kategoria { get; set; }
 
         [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Kwota musi być większa niż 0.")]
+        [Range(typeof(decimal), "-1000000", "1000000", ErrorMessage = "Kwota musi mieścić się w zakresie -1 000 000 do 1 000 000.")]
         public decimal Kwota { get; set; }
 
         [Required]

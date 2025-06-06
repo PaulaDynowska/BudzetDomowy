@@ -18,11 +18,32 @@ namespace BudzetDomowyApp.Controllers
             _context = context;
         }
 
+        private List<string> KategorieList()
+        {
+            return new List<string>
+            {
+                "Jedzenie",
+                "Rachunki",
+                "Transport",
+                "Rozrywka",
+                "Praca",
+                "Inne"
+            };
+        }
+
+
         // GET: Operacje
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Operacje.ToListAsync());
+            var operacje = await _context.Operacje.ToListAsync();
+
+            ViewBag.Suma = operacje.Sum(o => o.Kwota);
+            ViewBag.Wplywy = operacje.Where(o => o.Kwota > 0).Sum(o => o.Kwota);
+            ViewBag.Wydatki = operacje.Where(o => o.Kwota < 0).Sum(o => o.Kwota);
+
+            return View(operacje);
         }
+
 
         // GET: Operacje/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -45,12 +66,14 @@ namespace BudzetDomowyApp.Controllers
         // GET: Operacje/Create
         public IActionResult Create()
         {
+            ViewBag.Kategorie = new SelectList(KategorieList());
             return View();
         }
 
+
+
         // POST: Operacje/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Kategoria,Kwota,Data")] Operacja operacja)
@@ -77,12 +100,15 @@ namespace BudzetDomowyApp.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Kategorie = new SelectList(KategorieList(), operacja.Kategoria);
             return View(operacja);
         }
 
+
+
         // POST: Operacje/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Kategoria,Kwota,Data")] Operacja operacja)

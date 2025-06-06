@@ -6,6 +6,7 @@
 
 <div class="container mt-4">
     <h2>Lista operacji</h2>
+
     <p>
         <a asp-action="Create" class="btn" style="background-color: #7ed957; color: black;">Dodaj nową operację</a>
     </p>
@@ -40,4 +41,20 @@
             </tbody>
         </table>
     </div>
+    <div class="p-3 mt-4 shadow-sm" style="background-color: #b6f2a1; border: 2px solid black; border-radius: 8px;">
+        <div style="font-size: 1rem;">
+            <p><strong>Wpływy:</strong> @ViewBag.Wplywy zł</p>
+            <p>
+                <strong>Wydatki:</strong> 
+                <span style="color: red;">@ViewBag.Wydatki zł</span>
+            </p>
+            <p style="font-size: 1.25rem;">
+                <strong>Suma końcowa:</strong> 
+                <span style="color:@(ViewBag.Suma < 0 ? "red" : "black"); font-weight: bold;">
+                    @ViewBag.Suma zł
+                </span>
+            </p>
+        </div>
+    </div>
+
 </div>
