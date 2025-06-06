@@ -6,7 +6,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="p-4 shadow-sm" style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px;">
+<div class="p-4 mt-3 shadow-sm" style="background-color: #f2e5d7; border: 2px solid black; border-radius: 8px;">
     <h4>Czy na pewno chcesz usunąć tę operację?</h4>
     <hr />
     <dl class="row">
@@ -14,7 +14,7 @@
         <dd class="col-sm-9">@Model.Kategoria</dd>
 
         <dt class="col-sm-3">Kwota</dt>
-        <dd class="col-sm-9">@Model.Kwota</dd>
+        <dd class="col-sm-9">@Model.Kwota.ToString("F2")</dd>
 
         <dt class="col-sm-3">Data</dt>
         <dd class="col-sm-9">@Model.Data.ToShortDateString()</dd>
