@@ -47,9 +47,9 @@ Projekt realizowany w ramach przedmiotu:Wzorzec MVC
 
 ## 🚀 Instrukcja uruchomienia
 Aplikacja jest dostępne, po uruchomieniu pod adresem: http://localhost:5199
-dotnet restore
-dotnet build
-dotnet run
+- dotnet restore
+- dotnet build
+- dotnet run
 ### 1. Klonowanie repozytorium
 
 
