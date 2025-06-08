@@ -27,6 +27,8 @@ namespace BudzetDomowyApp.Controllers
                 operacje = operacje.Where(o => o.Data <= dataDo.Value);
 
             ViewBag.Suma = operacje.Any() ? operacje.Sum(o => o.Kwota) : 0;
+            var wydatki = _context.PlanowaneWydatki.ToList();
+            ViewBag.SumaPlanowanych = wydatki.Sum(w => w.Kwota);
 
             return View(operacje.OrderByDescending(o => o.Data).ToList());
         }

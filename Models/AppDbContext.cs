@@ -9,6 +9,9 @@ namespace BudzetDomowyApp.Models
             : base(options)
         {
         }
+        public DbSet<PlanowanyWydatek> PlanowaneWydatki { get; set; }
+
+
 
         public DbSet<Operacja> Operacje { get; set; }
     }

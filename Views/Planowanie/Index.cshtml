@@ -1,0 +1,66 @@
+@model List<BudzetDomowyApp.Models.PlanowanyWydatek>
+
+@{
+    ViewData["Title"] = "Planowanie";
+}
+
+<div class="d-flex justify-content-between align-items-start">
+    <!-- LEWA TABELA -->
+    <div class="me-5 w-50">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Kwota</th>
+                    <th>Data</th>
+                    <th>Kategoria</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="color:@(item.Kwota < 0 ? "red" : "green"); font-weight: bold;">
+                            @item.Kwota zł
+                        </td>
+                        <td>@(item.Data.HasValue ? item.Data.Value.ToString("dd.MM.yyyy", System.Globalization.CultureInfo.InvariantCulture) : "")
+                        <td>@item.Kategoria</td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                               class="btn btn-sm"
+                               style="background-color: #c0c0c0; color: red; font-weight: bold;">Usuń</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PRAWA STRONA: FORMULARZ + SALDO -->
+
+        <form asp-action="Dodaj">
+            <div class="mb-3">
+                <label for="Kwota">Kwota</label>
+                <input type="number" step="0.01" class="form-control" name="Kwota" required />
+            </div>
+            <div class="mb-3">
+                <label for="Data">Data</label>
+                <input type="date" class="form-control" name="Data" required />
+            </div>
+            <div class="mb-3">
+                <label for="Kategoria">Kategoria</label>
+                <select name="Kategoria" class="form-control" required>
+                    <option value="">-- wybierz kategorię --</option>
+                    <option>Jedzenie</option>
+                    <option>Rachunki</option>
+                    <option>Transport</option>
+                    <option>Rozrywka</option>
+                    <option>Praca</option>
+                    <option>Media</option>
+                    <option>Inne</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Dodaj</button>
+        </form>
+    </div>
+</div>
