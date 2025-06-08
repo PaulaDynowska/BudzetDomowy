@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Y+rTgYHWhftWxyjpWO+VmaM3Oa0H+J4HHsLXyvVcAyI=",
+  "Hash": "BlR+UN+OpDTv8QjQu7DiPNuFB7uiXP/sOR6Gdp/84IY=",
   "Source": "BudzetDomowyApp",
   "BasePath": "_content/BudzetDomowyApp",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Paula\\source\\repos\\BudzetDomowy\\BudzetDomowyApp\\wwwroot\\images\\logo_capybara.png",
+      "SourceId": "BudzetDomowyApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Paula\\source\\repos\\BudzetDomowy\\BudzetDomowyApp\\wwwroot\\",
+      "BasePath": "_content/BudzetDomowyApp",
+      "RelativePath": "images/logo_capybara.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\logo_capybara.png"
     },
     {
       "Identity": "C:\\Users\\Paula\\source\\repos\\BudzetDomowy\\BudzetDomowyApp\\wwwroot\\js\\site.js",

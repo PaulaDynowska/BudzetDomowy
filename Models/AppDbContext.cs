@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BudzetDomowyApp.Models;
 
-
 namespace BudzetDomowyApp.Models
 {
     public class AppDbContext : DbContext

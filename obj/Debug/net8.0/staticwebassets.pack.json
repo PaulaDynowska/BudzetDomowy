@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\Paula\\source\\repos\\BudzetDomowy\\BudzetDomowyApp\\wwwroot\\images\\logo_capybara.png",
+      "PackagePath": "staticwebassets\\images\\logo_capybara.png"
+    },
+    {
       "Id": "C:\\Users\\Paula\\source\\repos\\BudzetDomowy\\BudzetDomowyApp\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

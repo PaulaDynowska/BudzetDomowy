@@ -1,62 +1,86 @@
 @model IEnumerable<BudzetDomowyApp.Models.Operacja>
+@using Microsoft.AspNetCore.Http
 
 @{
     ViewData["Title"] = "Lista operacji";
 }
 
-<div class="container mt-4">
-        <div class="d-flex justify-content-end mb-3">
-        <a asp-action="GenerujPdf" class="btn"
-        style="width: 180px; background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
-            Raport PDF
-        </a>
-    </div>
+<!-- FILTROWANIE + PDF – LEWA I PRAWA STRONA -->
+<div class="d-flex justify-content-between align-items-center mb-3 px-5">
 
-    <table class="table table-striped" style="background-color: white; border: 2px solid black; border-radius: 8px;">
+    <!-- LEWA STRONA – FILTROWANIE W JEDNEJ LINII -->
+    <form method="get" class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center gap-1">
+            <label for="dataOd" class="fw-bold">Od:</label>
+            <input type="date" name="dataOd" id="dataOd" class="form-control"
+                   value="@Context.Request.Query["dataOd"]" />
+        </div>
+        <div class="d-flex align-items-center gap-1">
+            <label for="dataDo" class="fw-bold">Do:</label>
+            <input type="date" name="dataDo" id="dataDo" class="form-control"
+                   value="@Context.Request.Query["dataDo"]" />
+        </div>
+        <button type="submit" class="btn"
+                style="background-color: #bcbcbc; color: #1a472a; font-weight: bold;">
+            Filtruj
+        </button>
+    </form>
 
+    <!-- PRAWA STRONA – RAPORT PDF -->
+    <a asp-action="GenerujPdf" class="btn"
+       style="background-color: #bcbcbc; color: #1a472a; font-weight: bold;">
+        Raport PDF
+    </a>
+</div>
+
+<!-- TABELA OPERACJI -->
+<div class="px-5">
+    <table class="table table-bordered">
         <thead>
-                <tr>
-                    <th>Nr</th>
-                    <th>Kategoria</th>
-                    <th>Kwota</th>
-                    <th>Data</th>
-                    <th></th>
-                </tr>
-        </thead>
-
-        <tbody>
-        @{ var numer = 1; }
-        @foreach (var item in Model)
-        {
-                <tr>
-                <td>@numer</td>
-                <td>@item.Kategoria</td>
-                <td style="color: @(item.Kwota < 0 ? "red" : "green"); font-weight: bold;">
-                    @item.Kwota zł
-                </td>
-                <td>@item.Data.ToShortDateString()</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id"
-                       class="btn btn-sm"
-                       style="background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
-                        Szczegóły
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@item.Id"
-                       class="btn btn-sm"
-                       style="background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
-                        Edytuj
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id"
-                       class="btn btn-sm"
-                       style="background-color: #c0c0c0; color: red; font-weight: bold;">
-                        Usuń
-                    </a>
-                </td>
+            <tr>
+                <th>Nr</th>
+                <th>Kategoria</th>
+                <th>Kwota</th>
+                <th>Data</th>
+                <th></th>
             </tr>
-             numer++;
-        }
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+            }
+
+            @foreach (var operacja in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@operacja.Kategoria</td>
+                    <td style="color:@(operacja.Kwota < 0 ? "red" : "green"); font-weight: bold;">
+                        @operacja.Kwota.ToString("N2") zł
+                    </td>
+                    <td>@operacja.Data.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@operacja.Id"
+                           class="btn btn-sm"
+                           style="background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
+                            Szczegóły
+                        </a>
+
+                        <a asp-action="Edit" asp-route-id="@operacja.Id"
+                           class="btn btn-sm"
+                           style="background-color: #c0c0c0; color: #1a472a; font-weight: bold;">
+                            Edytuj
+                        </a>
+
+                        <a asp-action="Delete" asp-route-id="@operacja.Id"
+                           class="btn btn-sm"
+                           style="background-color: #c0c0c0; color: red; font-weight: bold;">
+                            Usuń
+                        </a>
+                    </td>
+                </tr>
+                index++;
+            }
         </tbody>
     </table>
-    </div>
-
 </div>

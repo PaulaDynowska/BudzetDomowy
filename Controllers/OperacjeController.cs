@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using BudzetDomowyApp.Models;
 using Microsoft.EntityFrameworkCore;
+using BudzetDomowyApp.Models;
 using QuestPDF.Fluent;
-using QuestPDF.Infrastructure;
-using System.Linq;
 using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using System.Globalization;
 
 namespace BudzetDomowyApp.Controllers
 {
@@ -16,127 +16,112 @@ namespace BudzetDomowyApp.Controllers
         {
             _context = context;
         }
-
-        // INDEX
-        public async Task<IActionResult> Index()
+        public IActionResult Index(DateTime? dataOd, DateTime? dataDo)
         {
-            var operacje = await _context.Operacje
-                .Where(o => !o.CzyUsunieta)
-                .OrderByDescending(o => o.Data)
-                .ToListAsync();
+            var operacje = _context.Operacje.AsQueryable();
 
-            ViewBag.Suma = operacje.Sum(o => o.Kwota);
-            ViewBag.Wplywy = operacje.Where(o => o.Kwota > 0).Sum(o => o.Kwota);
-            ViewBag.Wydatki = operacje.Where(o => o.Kwota < 0).Sum(o => o.Kwota);
+            if (dataOd.HasValue)
+                operacje = operacje.Where(o => o.Data >= dataOd.Value);
 
-            return View(operacje);
+            if (dataDo.HasValue)
+                operacje = operacje.Where(o => o.Data <= dataDo.Value);
+
+            ViewBag.Suma = operacje.Any() ? operacje.Sum(o => o.Kwota) : 0;
+
+            return View(operacje.OrderByDescending(o => o.Data).ToList());
         }
 
-        // CREATE
+
+        public IActionResult Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var operacja = _context.Operacje.FirstOrDefault(o => o.Id == id);
+            if (operacja == null) return NotFound();
+
+            return View(operacja);
+        }
+
         public IActionResult Create()
         {
-            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Operacja operacja)
+        public IActionResult Create(Operacja operacja)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(operacja);
-                await _context.SaveChangesAsync();
+                _context.Operacje.Add(operacja);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
 
-        // EDIT
-        public async Task<IActionResult> Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            var operacja = await _context.Operacje.FindAsync(id);
+            if (id == null) return NotFound();
+
+            var operacja = _context.Operacje.Find(id);
             if (operacja == null) return NotFound();
 
-            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Operacja operacja)
+        public IActionResult Edit(int id, Operacja operacja)
         {
             if (id != operacja.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 _context.Update(operacja);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
 
-        // DETAILS
-        public async Task<IActionResult> Details(int id)
+        public IActionResult Delete(int? id)
         {
-            var operacja = await _context.Operacje.FindAsync(id);
+            if (id == null) return NotFound();
+
+            var operacja = _context.Operacje.Find(id);
             if (operacja == null) return NotFound();
 
-            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
-            return View(operacja);
-        }
-
-        // DELETE
-        public async Task<IActionResult> Delete(int id)
-        {
-            var operacja = await _context.Operacje.FindAsync(id);
-            if (operacja == null) return NotFound();
-
-            ViewBag.Suma = _context.Operacje.Where(o => !o.CzyUsunieta).Sum(o => o.Kwota);
             return View(operacja);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var operacja = await _context.Operacje.FindAsync(id);
+            var operacja = _context.Operacje.Find(id);
             if (operacja != null)
             {
-                operacja.CzyUsunieta = true;
-                _context.Update(operacja);
-                await _context.SaveChangesAsync();
+                _context.Operacje.Remove(operacja);
+                _context.SaveChanges();
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        // HISTORIA
-        public async Task<IActionResult> Historia()
+        public IActionResult Historia()
         {
-            var wszystkie = await _context.Operacje
-                .OrderByDescending(o => o.Data)
-                .ToListAsync();
+            var operacje = _context.Operacje.OrderByDescending(o => o.Data).ToList();
+            ViewBag.Suma = operacje.Any() ? operacje.Sum(o => o.Kwota) : 0;
 
-            ViewBag.Suma = wszystkie
-                .Where(o => !o.CzyUsunieta)
-                .Sum(o => o.Kwota);
-
-            return View(wszystkie);
+            return View(operacje);
         }
 
-        // GENERUJ PDF
         public IActionResult GenerujPdf()
         {
-            var operacje = _context.Operacje
-                .Where(o => !o.CzyUsunieta)
-                .OrderByDescending(o => o.Data)
-                .ToList();
+            var operacje = _context.Operacje.OrderByDescending(o => o.Data).ToList();
 
             var dokument = Document.Create(container =>
             {
@@ -164,23 +149,33 @@ namespace BudzetDomowyApp.Controllers
 
                             table.Header(header =>
                             {
-                                header.Cell().Text("Kategoria").Bold();
-                                header.Cell().Text("Kwota").Bold();
-                                header.Cell().Text("Data").Bold();
+                                header.Cell().Element(CellStyle).Text("Kategoria").Bold();
+                                header.Cell().Element(CellStyle).Text("Kwota").Bold();
+                                header.Cell().Element(CellStyle).Text("Data").Bold();
                             });
 
                             foreach (var op in operacje)
                             {
-                                table.Cell().Text(op.Kategoria);
-                                table.Cell().Text($"{op.Kwota} zł");
-                                table.Cell().Text(op.Data.ToShortDateString());
+                                table.Cell().Element(CellStyle).Text(op.Kategoria);
+                                table.Cell().Element(CellStyle).Text(op.Kwota.ToString("N2") + " zł");
+                                table.Cell().Element(CellStyle).Text(op.Data.ToShortDateString());
+                            }
+
+                            static IContainer CellStyle(IContainer container)
+                            {
+                                return container
+                                    .PaddingVertical(5)
+                                    .PaddingHorizontal(10);
                             }
                         });
                 });
             });
 
-            var pdf = dokument.GeneratePdf();
-            return File(pdf, "application/pdf", "RaportOperacji.pdf");
+            var stream = new MemoryStream();
+            dokument.GeneratePdf(stream);
+            stream.Position = 0;
+
+            return File(stream, "application/pdf", "Zestawienie.pdf");
         }
     }
 }
